@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>我的相簿</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+
+    body {
+      font-family: "Noto Sans TC", sans-serif;
+      background: #111;
+      color: #eee;
+      padding: 24px;
+    }
+
+    h1 { text-align: center; margin-bottom: 24px; }
+
+    /* 核心：自動排列的 Grid 網格 */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .gallery img {
+      width: 100%;
+      aspect-ratio: 1 / 1;      /* 統一成正方形 */
+      object-fit: cover;        /* 裁切填滿，不變形 */
+      border-radius: 8px;
+      cursor: zoom-in;
+      transition: transform .2s;
+    }
+    .gallery img:hover { transform: scale(1.03); }
+
+    /* 點擊放大的遮罩 */
+    #lightbox {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.9);
+      display: none;
+      align-items: center; justify-content: center;
+      cursor: zoom-out;
+    }
+    #lightbox.show { display: flex; }
+    #lightbox img { max-width: 95%; max-height: 95%; }
+  </style>
+</head>
+<body>
+  <h1>我的相簿</h1>
+
+  <div class="gallery">
+    <img src="images/photo1.jpg" alt="照片 1" loading="lazy">
+    <img src="images/photo2.jpg" alt="照片 2" loading="lazy">
+    <img src="images/photo3.jpg" alt="照片 3" loading="lazy">
+    <!-- 之後新增照片，複製一行貼在這裡即可 -->
+  </div>
+
+  <div id="lightbox"><img alt=""></div>
+
+  <script>
+    const box = document.getElementById('lightbox');
+    const big = box.querySelector('img');
+    document.querySelectorAll('.gallery img').forEach(img => {
+      img.addEventListener('click', () => {
+        big.src = img.src;
+        box.classList.add('show');
+      });
+    });
+    box.addEventListener('click', () => box.classList.remove('show'));
+  </script>
+</body>
+</html>
